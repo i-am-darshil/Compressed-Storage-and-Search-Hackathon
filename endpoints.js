@@ -1,4 +1,3 @@
-import getS3LogSearchResult from './QueryCLP.js'
 import express from "express"
 
 const app = express()
@@ -8,10 +7,12 @@ app.get("/",(req,res)=>{
 })
 
 app.get("/query",(req,res)=>{
-    const service_name = req.servicename
-    const text_to_search = req.text_to_search
+    const serviceName = req.query.serviceName
+    const searchQuery = req.query.searchQuery
 
-    const detailLogS3URL = getS3LogSearchResult(service_name,text_to_search)
+    console.log("Recieved a query request. serviceName : " + serviceName + ",searchQuery : " + searchQuery)
+
+    const detailLogS3URL = "https://logging-solution-hackathon.s3.us-west-2.amazonaws.com/test.log"
 
     let response = {
         "s3URL": detailLogS3URL
