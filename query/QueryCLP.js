@@ -1,11 +1,27 @@
+import execShellCommand from "../utils/util.js"
+import configs from "../configs/config.js"
 
-const getS3LogSearchResult = (service_name,text_to_search)=>{
-    //query CLP endpoint, response will be a...
 
-    //put to an s3 bucket
+function query(req,res) {
+  const serviceName = req.query.serviceName;
+  const searchQuery = req.query.searchQuery;
+  const command = `cd ${configs.CLP_ROOT} && sudo ./sbin/search ${searchQuery}`;
 
-    //return the s3 url.
-    return "https://logging-solution-hackathon.s3.us-west-2.amazonaws.com/test.log";
+  console.log("Recieved a query request. serviceName : " + serviceName + ",searchQuery : " + searchQuery);
+  
+  execShellCommand(command)
+  .then(function (stdout) {
+    console.log(`Executing ${command} \n`,stdout);
+
+    const searchS3URL = "https://logging-solution-hackathon.s3.us-west-2.amazonaws.com/test.log";
+
+    let response = {
+      "s3URL": searchS3URL
+    };
+
+    res.json(response);
+  })
+
 }
 
-export default getS3LogSearchResult
+export default query;
