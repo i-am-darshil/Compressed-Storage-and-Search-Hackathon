@@ -9,7 +9,7 @@ function query(req,res) {
   const startWindow = req.query.startWindow;
   const endWindow = req.query.endWindow;
   
-  const resultsFilePath = `/${configs.QUERY_RESULTS_FOLDER}/${serviceName}/${uuidv4()}`;
+  const resultsFilePath = `/${configs.QUERY_RESULTS_FOLDER}/${serviceName}_${uuidv4()}`;
   // Below line is for mocking and testing
   // const resultsFilePath = "testResult.log";
 
