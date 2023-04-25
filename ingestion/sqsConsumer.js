@@ -1,7 +1,6 @@
 import { Consumer } from 'sqs-consumer';
-import { SQSClient } from '@aws-sdk/client-sqs';
-import CREDS from "../configs/creds.js"
-
+import downloadS3Content from "./pullS3Content.js";
+import {sqsClient} from "../utils/awsUtil.js";
 
 const queueUrl = 'https://sqs.us-west-2.amazonaws.com/648508847588/logging-solution-hackathon';
 console.log("Creating a sqs consumer on queueUrl : ", queueUrl);
@@ -9,16 +8,10 @@ console.log("Creating a sqs consumer on queueUrl : ", queueUrl);
 const sqsConsumer = Consumer.create({
   queueUrl: queueUrl,
   handleMessage: async (message) => {
-    console.log("Recieved a message : ", message)
-    // ...
+    console.log("Recieved a message : ", JSON.parse(message.Body))
+    downloadS3Content(JSON.parse(message.Body))
   },
-  sqs: new SQSClient({
-    region: 'us-west-2',
-    credentials: {
-      accessKeyId: CREDS.ACCESS_KEY,
-      secretAccessKey: CREDS.SECRET_KEY
-    }
-  })
+  sqs: sqsClient
 });
 
 sqsConsumer.on('error', (err) => {
