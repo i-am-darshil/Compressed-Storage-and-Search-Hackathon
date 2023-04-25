@@ -42,7 +42,7 @@ function query(req,res) {
     loop.setTime(loop.getTime() + 1000 * 60);
   }
   
-  const resultsFilePath = `/${configs.QUERY_RESULTS_FOLDER}/${serviceName}_${uuidv4()}`;
+  const resultsFilePath = `${configs.QUERY_RESULTS_FOLDER}/${serviceName}_${uuidv4()}`;
   // Below line is for mocking and testing
   // const resultsFilePath = "testResult.log";
 
