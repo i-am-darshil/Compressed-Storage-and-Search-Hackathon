@@ -1,7 +1,16 @@
 import sqsConsumer from "./ingestion/sqsConsumer.js"
 import app from "./endpoints.js"
+import fs from "fs"
+import configs from "./configs/config.js"
 
 const PORT = 3000
+
+if (!fs.existsSync(configs.QUERY_RESULTS_FOLDER)) {
+
+  fs.mkdir(configs.QUERY_RESULTS_FOLDER, 
+    { recursive: true },
+     error => error ? console.log(error) : console.log(`${configs.QUERY_RESULTS_FOLDER} folder created`) ) ;
+  }
 
 sqsConsumer.start();
 
