@@ -1,30 +1,17 @@
 import fs from 'fs';
-import {S3Client,PutObjectCommand} from "@aws-sdk/client-s3";
-import CREDS from "../creds.js";
 import { Upload } from "@aws-sdk/lib-storage";
+import {s3client,BUCKET_TO_UPLOAD} from "../utils/awsUtil.js";
 
-const config = {
-    region: 'us-west-2',
-    credentials: {
-        accessKeyId: CREDS.ACCESS_KEY,
-        secretAccessKey: CREDS.SECRET_KEY
-    }
-}
-
-const s3client = new S3Client(config)
-
-const BUCKET_TO_UPLOAD = "logging-solution-hackathon"
-
-const uploadToS3 = async (filePath)=>{
+export const uploadToS3 = async (filePath)=>{
     //get the content from filepath and write to the s3 stream .
     const readStream = fs.createReadStream(filePath)
     const fileName = filePath.split('/').slice(-1)[0]
-    console.log("Filename : ", fileName)
+    console.log("Uploading the file : ", fileName)
     const response = await uploadToS3Content(readStream,fileName)
     return response;
 }
 
-const uploadToS3Content = async (fileContent,fileName)=>{
+export const uploadToS3Content = async (fileContent,fileName)=>{
 
     try {
         const parallelUploads = new Upload({
@@ -48,6 +35,3 @@ const uploadToS3Content = async (fileContent,fileName)=>{
         console.log(e);
     }
 }
-
-export default uploadToS3;
-export default uploadToS3Content;

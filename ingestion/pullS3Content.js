@@ -1,17 +1,6 @@
-import {S3Client,GetObjectCommand} from "@aws-sdk/client-s3";
-
-import CREDS from "../creds.js"; // ES Modules import
+import {GetObjectCommand} from "@aws-sdk/client-s3";
+import {s3client} from "../utils/awsUtil.js";
 import fs from 'fs';
-
-const config = {
-    region: 'us-west-2',
-    credentials: {
-        accessKeyId: CREDS.ACCESS_KEY,
-        secretAccessKey: CREDS.SECRET_KEY
-    }
-}
-
-const s3client = new S3Client(config)
 
 
 const getFilePath = (bucketName, object, s3ARN) => {
