@@ -1,6 +1,6 @@
 import {S3Client} from "@aws-sdk/client-s3";
 import {SQSClient} from "@aws-sdk/client-sqs";
-import CREDS from "../creds.js";
+import CREDS from "../configs/creds.js";
 
 const CONFIG = {
     region: 'us-west-2',
