@@ -11,8 +11,10 @@ function execShellCommand(cmd) {
    exec(cmd, (error, stdout, stderr) => {
     if (error) {
      console.warn(error);
+     reject(`${cmd} failed with error : ${error}`)
     }
-    resolve(stdout? stdout : stderr);
+    console.log(stdout? stdout : stderr)
+    resolve("success");
    });
   });
  }
