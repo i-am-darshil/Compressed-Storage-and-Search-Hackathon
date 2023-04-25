@@ -1,5 +1,5 @@
 import express from "express"
-import query from "./query/queryClp.js"
+import query from "./query/query.js"
 
 
 const app = express()
