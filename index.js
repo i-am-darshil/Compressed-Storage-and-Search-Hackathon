@@ -10,7 +10,14 @@ if (!fs.existsSync(configs.QUERY_RESULTS_FOLDER)) {
   fs.mkdir(configs.QUERY_RESULTS_FOLDER, 
     { recursive: true },
      error => error ? console.log(error) : console.log(`${configs.QUERY_RESULTS_FOLDER} folder created`) ) ;
-  }
+}
+
+if (!fs.existsSync(configs.RAW_LOGS_FOLDER)) {
+
+  fs.mkdir(configs.RAW_LOGS_FOLDER, 
+    { recursive: true },
+     error => error ? console.log(error) : console.log(`${configs.RAW_LOGS_FOLDER} folder created`) ) ;
+}
 
 sqsConsumer.start();
 
