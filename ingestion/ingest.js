@@ -4,7 +4,7 @@ import execShellCommand from "../utils/util.js"
 function ingest(logFile) {
   return new Promise((resolve, reject) => {
     console.log(`Ingesting ${logFile} into CLP`)
-    let command = `cd ${configs.CLP_ROOT} && sudo ./sbin/compress ${configs.CLP_ROOT}/${logFile}`;
+    let command = `cd ${configs.CLP_ROOT} && sudo ./sbin/compress ${logFile}`;
     // Below line is for mocking and testing
     // let command = `ls`
     execShellCommand(command)
