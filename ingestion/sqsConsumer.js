@@ -1,6 +1,6 @@
 import { Consumer } from 'sqs-consumer';
 import { SQSClient } from '@aws-sdk/client-sqs';
-import CREDS from "../creds.js"
+import CREDS from "../configs/creds.js"
 
 
 const queueUrl = 'https://sqs.us-west-2.amazonaws.com/648508847588/logging-solution-hackathon';
