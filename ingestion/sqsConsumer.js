@@ -17,9 +17,14 @@ const getFilePath = (object) => {
 
     const path = folders.slice(0,-1).join('/')
 
+    // FileName : 11
+    // Object : AtochaExampleService/2023/04/26/10/11/4d5b68eb-0fb4-4c3d-bedf-a833f53a58bf
     console.log("FileName :",fileName)
     console.log("Object :",object)
 
+    if (folders.length != 6 || fileName == null) {
+      return null;
+    }
 
     const absolutePathToFolder = `${configs.RAW_LOGS_FOLDER}/${path}`
     //test path
@@ -51,6 +56,10 @@ const downloadS3Content  = async (sqsMessage)=> {
         const object = message.s3.object.key
 
         const filePath = getFilePath(object)
+
+        if (filePath == null) {
+          throw new Error("Incorect file path in s3");
+        }
 
         let params = {
             "Bucket": bucketName,
