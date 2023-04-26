@@ -1,5 +1,7 @@
 import configs from "../configs/config.js"
 import execShellCommand from "../utils/util.js"
+import {uploadToS3} from "./s3Upload.js";
+import {unlink} from "fs/promises";
 
 function detailLog(req,res) {
   try {
@@ -35,20 +37,24 @@ function detailLog(req,res) {
     .then(function (resultsFilePath){
       // Upload resultsFilePath to s3
       // return s3 url
-      const s3url = "https://logging-solution-hackathon.s3.us-west-2.amazonaws.com/test.log";
-      console.log(`${resultsFilePath} uploaded to s3, s3url : ${s3url}`);
-      return s3url;
+      console.log(`Uploading to ${resultsFilePath} to s3`);
+      return uploadToS3(resultsFilePath)
     }).then(function (s3url) {
-      // delete the resultsFilePath
-
-      console.log(`${resultsFilePath} deleted`);
-
+      console.log(`Successfully uploaded to s3. Returning ${s3url} as response`);
       let response = {
-        "s3URL": s3url
+        "s3URL": s3Url
       };
-
-      res.status(200)
+      res.status(200);
       res.json(response);
+      return;
+    })
+    .then(()=>{
+      //delete the file
+      console.log(`Deleting the file : ${resultsFilePath}`)
+      return unlink(resultsFilePath)
+    })
+    .then(()=>{
+      console.log(`Successfully deleted the file ${resultsFilePath}`);
     })
     .catch(function (err) {
       console.error(`Error occured : ${err}`)
