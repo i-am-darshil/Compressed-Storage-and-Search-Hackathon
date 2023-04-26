@@ -6,28 +6,29 @@ import {unlink} from "fs/promises";
 function detailLog(req,res) {
   try {
     const serviceName = req.query.serviceName;
-    const timeWindow = req.query.timeWindow; //Format will be : yyyy/mm/dd/hh/mm
+    // const timeWindow = req.query.timeWindow; //Format will be : yyyy/mm/dd/hh/mm
+    const requestId = req.query.requestId;
 
-    if (serviceName == null || timeWindow == null) {
+    if (serviceName == null || requestId == null) {
       let response = {
         "s3URL": "An error occured :(",
-        "error": "serviceName, timeWindow are required parameters "
+        "error": "serviceName, requestId are required parameters "
       };
       res.status(400)
       res.json(response)
       return
     }
 
-    let minuteLogToDecompress = `${configs.RAW_LOGS_FOLDER}/${serviceName}/${timeWindow}`
+    let requestIdLogToDecompress = `${configs.RAW_LOGS_FOLDER}/${serviceName}/${requestId}`
 
     // RAW_LOGS_FOLDER already has a / at start
-    let resultsFilePath = `${configs.DECOMPRESSED_LOGS_FOLDER}${minuteLogToDecompress}`
+    let resultsFilePath = `${configs.DECOMPRESSED_LOGS_FOLDER}${requestIdLogToDecompress}`
 
-    let command = `cd ${configs.CLP_ROOT} && sudo ./sbin/decompress -d ${configs.DECOMPRESSED_LOGS_FOLDER} ${minuteLogToDecompress}`;
+    let command = `cd ${configs.CLP_ROOT} && sudo ./sbin/decompress -d ${configs.DECOMPRESSED_LOGS_FOLDER} ${requestIdLogToDecompress}`;
     // Below line is for mocking and testing
-    // let command = `echo ${minuteLogToDecompress} ${resultsFilePath}`;
+    // let command = `echo ${requestIdLogToDecompress} ${resultsFilePath}`;
 
-    console.log("Recieved a decompress request. serviceName : " + serviceName + ",timeWindow : " + timeWindow);
+    console.log("Recieved a decompress request. serviceName : " + serviceName + ",requestId : " + requestId);
 
     execShellCommand(command)
     .then(function (status) {
