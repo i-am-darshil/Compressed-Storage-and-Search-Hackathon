@@ -8,6 +8,9 @@ export const uploadToS3 = async (filePath)=>{
     const fileName = filePath.split('/').slice(-1)[0]
     console.log(`Uploading the file : , ${fileName}`)
     const response = await uploadToS3Content(readStream,fileName)
+    if (response == null) {
+      throw new Error(`Upload to S3 failed for ${filePath}`);
+    }
     return response;
 }
 

@@ -29,6 +29,7 @@ function detailLog(req,res) {
     // let command = `echo ${requestIdLogToDecompress} ${resultsFilePath}`;
 
     console.log("Recieved a decompress request. serviceName : " + serviceName + ",requestId : " + requestId);
+    let s3Path = "";
 
     execShellCommand(command)
     .then(function (status) {
@@ -40,14 +41,10 @@ function detailLog(req,res) {
       // return s3 url
       console.log(`Uploading to ${resultsFilePath} to s3`);
       return uploadToS3(resultsFilePath)
-    }).then(function (resultsFilePath) {
-      console.log(`Successfully uploaded to s3. Returning ${resultsFilePath} as response`);
-      let response = {
-        "s3URL": resultsFilePath
-      };
-      res.status(200);
-      res.json(response);
-      return;
+    }).then(function (s3url) {
+      s3Path = s3url;
+      console.log(`Successfully uploaded to s3. Will ${s3Path} as response after deleting`);
+      return();
     })
     .then(()=>{
       //delete the file
@@ -56,6 +53,11 @@ function detailLog(req,res) {
     })
     .then(()=>{
       console.log(`Successfully deleted the file ${resultsFilePath}`);
+      let response = {
+        "s3URL": s3Path
+      };
+      res.status(200);
+      res.json(response);
     })
     .catch(function (err) {
       console.error(`Error occured : ${err}`)
