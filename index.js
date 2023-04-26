@@ -19,6 +19,13 @@ if (!fs.existsSync(configs.RAW_LOGS_FOLDER)) {
      error => error ? console.log(error) : console.log(`${configs.RAW_LOGS_FOLDER} folder created`) ) ;
 }
 
+if (!fs.existsSync(configs.DECOMPRESSED_LOGS_FOLDER)) {
+
+  fs.mkdir(configs.DECOMPRESSED_LOGS_FOLDER, 
+    { recursive: true },
+     error => error ? console.log(error) : console.log(`${configs.DECOMPRESSED_LOGS_FOLDER} folder created`) ) ;
+}
+
 sqsConsumer.start();
 
 app.listen(PORT, () => {
