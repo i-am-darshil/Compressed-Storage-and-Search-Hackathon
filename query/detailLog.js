@@ -17,7 +17,9 @@ function detailLog(req,res) {
     }
 
     let minuteLogToDecompress = `${configs.RAW_LOGS_FOLDER}/${timeWindow}`
-    let resultsFilePath = `${configs.DECOMPRESSED_LOGS_FOLDER}/${minuteLogToDecompress}`
+
+    // RAW_LOGS_FOLDER already has a / at start
+    let resultsFilePath = `${configs.DECOMPRESSED_LOGS_FOLDER}${minuteLogToDecompress}`
 
     let command = `cd ${configs.CLP_ROOT} && sudo ./sbin/decompress -d ${configs.DECOMPRESSED_LOGS_FOLDER} ${minuteLogToDecompress}`;
     // Below line is for mocking and testing
