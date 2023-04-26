@@ -40,10 +40,10 @@ function detailLog(req,res) {
       // return s3 url
       console.log(`Uploading to ${resultsFilePath} to s3`);
       return uploadToS3(resultsFilePath)
-    }).then(function (s3url) {
-      console.log(`Successfully uploaded to s3. Returning ${s3url} as response`);
+    }).then(function (resultsFilePath) {
+      console.log(`Successfully uploaded to s3. Returning ${resultsFilePath} as response`);
       let response = {
-        "s3URL": s3Url
+        "s3URL": resultsFilePath
       };
       res.status(200);
       res.json(response);

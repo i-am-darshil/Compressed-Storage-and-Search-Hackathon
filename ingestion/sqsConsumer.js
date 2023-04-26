@@ -11,15 +11,16 @@ console.log("Creating a sqs consumer on queueUrl : ", queueUrl);
 
 const getFilePath = (object) => {
 
+    // Object : AtochaExampleService/4d5b68eb-0fb4-4c3d-bedf-a833f53a58bf
+    console.log("Object :",object)
+
     let folders = object.split('/')
 
     if(folders.length !=2) return null;
 
     const  [serviceName,fileName] = folders
 
-    // Object : AtochaExampleService/4d5b68eb-0fb4-4c3d-bedf-a833f53a58bf
     // FileName : 4d5b68eb-0fb4-4c3d-bedf-a833f53a58bf
-    console.log("Object :",object)
     console.log("FileName :",fileName)
 
     const absolutePathToFolder = `${configs.RAW_LOGS_FOLDER}/${serviceName}`
@@ -95,15 +96,15 @@ const sqsConsumer = Consumer.create({
 });
 
 sqsConsumer.on('error', (err) => {
-  console.error(err.message);
+  console.error(err);
 });
 
 sqsConsumer.on('processing_error', (err) => {
-  console.error(err.message);
+  console.error(err);
 });
 
 sqsConsumer.on('timeout_error', (err) => {
-  console.error(err.message);
+  console.error(err);
 });
 
 export default sqsConsumer;
