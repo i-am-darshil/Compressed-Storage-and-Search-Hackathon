@@ -4,17 +4,44 @@ import {sqsClient} from "../utils/awsUtil.js";
 import ingest from "./ingest.js"
 import {GetObjectCommand} from "@aws-sdk/client-s3";
 import configs from "../configs/config.js";
+import fs from "fs";
 
 const queueUrl = 'https://sqs.us-west-2.amazonaws.com/648508847588/logging-solution-hackathon';
 console.log("Creating a sqs consumer on queueUrl : ", queueUrl);
 
 const getFilePath = (object) => {
 
-  const filePath = `${configs.RAW_LOGS_FOLDER}/${object}`
+    let folders = object.split('/').slice(0,-1)
 
-  console.log("FilePath : ",filePath)
+    const fileName = folders[folders.length-1]
 
-  return filePath
+    const path = folders.slice(0,-1).join('/')
+
+    console.log("FileName :",fileName)
+    console.log("Object :",object)
+
+
+    const absolutePathToFolder = `${configs.RAW_LOGS_FOLDER}/${path}`
+    //test path
+    //const absolutePathToFolder = `../Logs/${path}`
+
+    const filePath = `${configs.RAW_LOGS_FOLDER}/${path}/${fileName}`
+    //test path
+    // const filePath  = `${absolutePathToFolder}/${fileName}`
+
+    if (!fs.existsSync(absolutePathToFolder)) {
+        console.log(absolutePathToFolder)
+        fs.mkdir(absolutePathToFolder,
+            { recursive: true },
+            (err)=>
+                err ? console.log("error creating folder") : console.log(`created folder ${absolutePathToFolder}`)
+        );
+        console.log("Created the folder ...")
+    }
+
+    console.log("FilePath : ",filePath)
+
+    return filePath
 }
 
 const downloadS3Content  = async (sqsMessage)=> {

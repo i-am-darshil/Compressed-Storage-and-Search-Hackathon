@@ -6,7 +6,7 @@ export const uploadToS3 = async (filePath)=>{
     //get the content from filepath and write to the s3 stream .
     const readStream = fs.createReadStream(filePath)
     const fileName = filePath.split('/').slice(-1)[0]
-    console.log("Uploading the file : ", fileName)
+    console.log(`Uploading the file : , ${fileName}`)
     const response = await uploadToS3Content(readStream,fileName)
     return response;
 }

@@ -9,12 +9,12 @@ const writeToFile = (readableContent,writeStream) =>
         })
 
         readableContent.on("error", (er)=>{
-            console.log("[readableContent on Error] Error while reading content in chunks from s3 : ",er)
+            console.log(`[readableContent on Error] Error while reading content in chunks from s3 : ,${er}`)
             reject()
         });
 
         writeStream.on("error",(er)=>{
-            console.log("[writestream on Error] Error while writing content to file :",er)
+            console.log(`[writestream on Error] Error while writing content to file :,${er}`)
             reject()
         })
 
@@ -38,7 +38,7 @@ const storeS3Content = async (filePath,command)=>
     }
     catch (er)
     {
-        console.log("Error while retrieving content from s3 :",er);
+        console.log(`Error while retrieving content from s3 for [${filePath}]:,${er}`);
     }
 
     let writeStream = fs.createWriteStream(filePath)
@@ -49,7 +49,7 @@ const storeS3Content = async (filePath,command)=>
     }
     catch(er)
     {
-        console.log("Error while writing to a file :",er);
+        console.log(`Error while writing to a filepath [${filePath}]:,${er}`);
     }
 
 

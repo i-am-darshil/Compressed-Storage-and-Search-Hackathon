@@ -52,9 +52,9 @@ function query(req,res) {
   console.log("Recieved a query request. serviceName : " + serviceName + ",searchQuery : " + searchQuery);
   
   execShellCommand(command)
-      .then(function (stdout) {
-    console.log(`Executing ${command} \n`,stdout);
-    return resultsFilePath
+      .then(function (status) {
+        console.log(`Executed ${command} with status : ${status}`);
+        return resultsFilePath
       })
       .then((resultsFilePath)=>{
         return uploadToS3(resultsFilePath)
@@ -70,7 +70,7 @@ function query(req,res) {
         return unlink(resultsFilePath)
       })
       .then(()=>{
-        console.log("Successfully deleted the file");
+        console.log(`Successfully deleted the file ${resultsFilePath}`);
       })
       .catch((err)=>{
         let response = {
