@@ -71,8 +71,9 @@ const downloadS3Content  = async (sqsMessage)=> {
 function messageHandler(message) {
   return new Promise((resolve, reject) => {
     try {
+      console.log("Recieved a message : ", message.Body)
+
       const messageBody = JSON.parse(message.Body)
-      console.log("Recieved a message : ", messageBody)
       // download the file from S3 to logFile ({serviceName}/${year}/${month}/${day}/${hour}/${minute})
 
       //assumption : for hackathon scope , we are assuming that we get a single log file per minute.
@@ -85,11 +86,11 @@ function messageHandler(message) {
           })
           .catch(function (error){
             console.warn(`Failure in handling sqs message with error : ${error}`)
-            reject()
+            resolve()
           })
     } catch (error) {
       console.warn(`Failure in handling sqs message with error : ${error}`)
-      reject()
+      resolve()
     }
     
   })
@@ -102,15 +103,15 @@ const sqsConsumer = Consumer.create({
 });
 
 sqsConsumer.on('error', (err) => {
-  console.error(err);
+  console.error(err.message);
 });
 
 sqsConsumer.on('processing_error', (err) => {
-  console.error(err);
+  console.error(err.message);
 });
 
 sqsConsumer.on('timeout_error', (err) => {
-  console.error(err);
+  console.error(err.message);
 });
 
 export default sqsConsumer;
