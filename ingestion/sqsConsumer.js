@@ -70,22 +70,28 @@ const downloadS3Content  = async (sqsMessage)=> {
 
 function messageHandler(message) {
   return new Promise((resolve, reject) => {
-    const messageBody = JSON.parse(message.Body)
-    console.log("Recieved a message : ", messageBody)
-    // download the file from S3 to logFile ({serviceName}/${year}/${month}/${day}/${hour}/${minute})
+    try {
+      const messageBody = JSON.parse(message.Body)
+      console.log("Recieved a message : ", messageBody)
+      // download the file from S3 to logFile ({serviceName}/${year}/${month}/${day}/${hour}/${minute})
 
-    //assumption : for hackathon scope , we are assuming that we get a single log file per minute.
-    downloadS3Content(messageBody)
-        .then(function(filePath) {
-                return ingest(filePath)
-        })
-        .then(function(stdout) {
-          resolve()
-        })
-        .catch(function (error){
-          console.warn(`Failure in handling sqs message with error : ${error}`)
-          reject()
-        })
+      //assumption : for hackathon scope , we are assuming that we get a single log file per minute.
+      downloadS3Content(messageBody)
+          .then(function(filePath) {
+                  return ingest(filePath)
+          })
+          .then(function(stdout) {
+            resolve()
+          })
+          .catch(function (error){
+            console.warn(`Failure in handling sqs message with error : ${error}`)
+            reject()
+          })
+    } catch (error) {
+      console.warn(`Failure in handling sqs message with error : ${error}`)
+      reject()
+    }
+    
   })
 }
 
