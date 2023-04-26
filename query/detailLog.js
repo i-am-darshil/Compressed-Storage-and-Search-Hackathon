@@ -16,7 +16,7 @@ function detailLog(req,res) {
       return
     }
 
-    let minuteLogToDecompress = `${configs.RAW_LOGS_FOLDER}/${timeWindow}`
+    let minuteLogToDecompress = `${configs.RAW_LOGS_FOLDER}/${serviceName}/${timeWindow}`
 
     // RAW_LOGS_FOLDER already has a / at start
     let resultsFilePath = `${configs.DECOMPRESSED_LOGS_FOLDER}${minuteLogToDecompress}`
