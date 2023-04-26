@@ -11,15 +11,16 @@ console.log("Creating a sqs consumer on queueUrl : ", queueUrl);
 
 const getFilePath = (object) => {
 
+    // Object : AtochaExampleService/4d5b68eb-0fb4-4c3d-bedf-a833f53a58bf
+    console.log("Object :",object)
+
     let folders = object.split('/')
 
     if(folders.length !=2) return null;
 
     const  [serviceName,fileName] = folders
 
-    // Object : AtochaExampleService/4d5b68eb-0fb4-4c3d-bedf-a833f53a58bf
     // FileName : 4d5b68eb-0fb4-4c3d-bedf-a833f53a58bf
-    console.log("Object :",object)
     console.log("FileName :",fileName)
 
     const absolutePathToFolder = `${configs.RAW_LOGS_FOLDER}/${serviceName}`
@@ -69,22 +70,29 @@ const downloadS3Content  = async (sqsMessage)=> {
 
 function messageHandler(message) {
   return new Promise((resolve, reject) => {
-    const messageBody = JSON.parse(message.Body)
-    console.log("Recieved a message : ", messageBody)
-    // download the file from S3 to logFile ({serviceName}/${year}/${month}/${day}/${hour}/${minute})
+    try {
+      console.log("Recieved a message : ", message.Body)
 
-    //assumption : for hackathon scope , we are assuming that we get a single log file per minute.
-    downloadS3Content(messageBody)
-        .then(function(filePath) {
-                return ingest(filePath)
-        })
-        .then(function(stdout) {
-          resolve()
-        })
-        .catch(function (error){
-          console.warn(`Failure in handling sqs message with error : ${error}`)
-          reject()
-        })
+      const messageBody = JSON.parse(message.Body)
+      // download the file from S3 to logFile ({serviceName}/${year}/${month}/${day}/${hour}/${minute})
+
+      //assumption : for hackathon scope , we are assuming that we get a single log file per minute.
+      downloadS3Content(messageBody)
+          .then(function(filePath) {
+                  return ingest(filePath)
+          })
+          .then(function(stdout) {
+            resolve()
+          })
+          .catch(function (error){
+            console.warn(`Failure in handling sqs message with error : ${error}`)
+            resolve()
+          })
+    } catch (error) {
+      console.warn(`Failure in handling sqs message with error : ${error}`)
+      resolve()
+    }
+    
   })
 }
 
