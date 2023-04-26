@@ -44,7 +44,7 @@ function detailLog(req,res) {
     }).then(function (s3url) {
       s3Path = s3url;
       console.log(`Successfully uploaded to s3. Will ${s3Path} as response after deleting`);
-      return();
+      return;
     })
     .then(()=>{
       //delete the file
