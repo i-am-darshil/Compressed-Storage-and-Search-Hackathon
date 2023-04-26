@@ -9,6 +9,16 @@ function query(req,res) {
   const startWindow = req.query.startWindow; //Format will be : yy/mm/dd/hh/mm
   const endWindow = req.query.endWindow; //Format will be : yy/mm/dd/hh/mm
 
+  if (serviceName == null || searchQuery == null || startWindow == null || endWindow == null) {
+    let response = {
+      "s3URL": "An error occured :(",
+      "error": "serviceName, searchQuery, startWindow, endWindow are required parameters "
+    };
+    res.status(400)
+    res.json(response)
+    return
+  }
+
   let command = `cd ${configs.CLP_ROOT} && sudo ./sbin/search ${searchQuery}`;
   // Below line is for mocking and testing
   // let command = `echo`;
