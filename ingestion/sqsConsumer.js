@@ -11,28 +11,22 @@ console.log("Creating a sqs consumer on queueUrl : ", queueUrl);
 
 const getFilePath = (object) => {
 
-    let folders = object.split('/').slice(0,-1)
+    let folders = object.split('/')
 
-    const fileName = folders[folders.length-1]
+    if(folders.length !=2) return null;
 
-    const path = folders.slice(0,-1).join('/')
+    const  [serviceName,fileName] = folders
 
-    // FileName : 11
-    // Object : AtochaExampleService/2023/04/26/10/11/4d5b68eb-0fb4-4c3d-bedf-a833f53a58bf
-    console.log("FileName :",fileName)
+    // Object : AtochaExampleService/4d5b68eb-0fb4-4c3d-bedf-a833f53a58bf
+    // FileName : 4d5b68eb-0fb4-4c3d-bedf-a833f53a58bf
     console.log("Object :",object)
+    console.log("FileName :",fileName)
 
-    if (folders.length != 6 || fileName == null) {
-      return null;
-    }
-
-    const absolutePathToFolder = `${configs.RAW_LOGS_FOLDER}/${path}`
+    const absolutePathToFolder = `${configs.RAW_LOGS_FOLDER}/${serviceName}`
     //test path
-    //const absolutePathToFolder = `../Logs/${path}`
+    // const absolutePathToFolder = `../Logs/${serviceName}`
 
-    const filePath = `${configs.RAW_LOGS_FOLDER}/${path}/${fileName}`
-    //test path
-    // const filePath  = `${absolutePathToFolder}/${fileName}`
+    const filePath = `${absolutePathToFolder}/${fileName}`
 
     if (!fs.existsSync(absolutePathToFolder)) {
         console.log(absolutePathToFolder)
@@ -56,11 +50,9 @@ const downloadS3Content  = async (sqsMessage)=> {
         const object = message.s3.object.key
 
         const filePath = getFilePath(object)
-
         if (filePath == null) {
           throw new Error("Incorect file path in s3");
         }
-
         let params = {
             "Bucket": bucketName,
             "Key": object
