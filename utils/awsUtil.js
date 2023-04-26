@@ -12,5 +12,5 @@ const CONFIG = {
 
 export const s3client = new S3Client(CONFIG)
 export const sqsClient = new SQSClient(CONFIG)
-export const BUCKET_TO_UPLOAD = "logging-solution-hackathon"
+export const BUCKET_TO_UPLOAD = "logging-solution-hackathon-clp-results"
 

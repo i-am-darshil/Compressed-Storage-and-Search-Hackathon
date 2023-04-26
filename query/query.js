@@ -10,7 +10,7 @@ function query(req,res) {
   const startWindow = req.query.startWindow; //Format will be : yy/mm/dd/hh/mm
   const endWindow = req.query.endWindow; //Format will be : yy/mm/dd/hh/mm
 
-  let command = `cd ${configs.CLP_ROOT} && sudo ./sbin/search ${searchQuery}`;
+  let command = `cd ${configs.CLP_ROOT} && sudo ./sbin/search '${searchQuery}'`;
   // Below line is for mocking and testing
   // let command = `echo`;
 
