@@ -16,7 +16,8 @@ function messageHandler(message) {
     // download the file from S3 to logFile ({serviceName}/${year}/${month}/${day}/${hour}/${minute})
 
     ingest(logFile)
-      .then(function(stdout) {
+      .then(function(status) {
+        console.log(status)
         resolve()
       })
       .catch(function (error){
@@ -24,8 +25,6 @@ function messageHandler(message) {
         resolve()
       })
   })
- 
-
 }
 
 const sqsConsumer = Consumer.create({
