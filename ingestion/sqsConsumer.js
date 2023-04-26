@@ -58,8 +58,6 @@ function messageHandler(message) {
           reject()
         })
   })
- 
-
 }
 
 const sqsConsumer = Consumer.create({
